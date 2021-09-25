@@ -1,0 +1,13 @@
+version: "3.7"
+
+services:
+  entrypoint:
+    restart: always
+
+  app:
+    build:
+      target: prod
+    volumes:
+      - ./.env:/var/www/html/.env
+      - ./var:/var/www/htmp/var
+    restart: always

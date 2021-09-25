@@ -1,0 +1,42 @@
+version: "3.7"
+
+# Required environment variables:
+# - TRAEFIK_IDENTIFIER
+# - SITE_URL
+# - CONTAINER_UID
+# - CONTAINER_GID
+
+services:
+  entrypoint:
+    image: registry.ops.katiecordescodes.com/personalsite-externals-entrypoint
+    build:
+      context: .
+      dockerfile: .docker/entrypoint.dockerfile
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${TRAEFIK_IDENTIFIER}.rule=Host(`${SITE_URL}`)"
+      - "traefik.http.routers.${TRAEFIK_IDENTIFIER}.entryPoints=web"
+      - "traefik.http.routers.${TRAEFIK_IDENTIFIER}.service=${TRAEFIK_IDENTIFIER}"
+      - "traefik.http.services.${TRAEFIK_IDENTIFIER}.loadbalancer.server.port=8080"
+    networks:
+      - default
+      - traefik
+
+  app:
+    image: registry.ops.katiecordescodes.com/personalsite-externals-app
+    build:
+      context: .
+      dockerfile: .docker/app.dockerfile
+      args:
+        PHPTYPE: fpm
+        CONTAINER_UID: $CONTAINER_UID
+        CONTAINER_GID: $CONTAINER_GID
+    user: "$CONTAINER_UID:$CONTAINER_GID"
+    labels:
+      - "traefik.enable=false"
+    networks:
+      - default
+
+networks:
+  traefik:
+    external: true

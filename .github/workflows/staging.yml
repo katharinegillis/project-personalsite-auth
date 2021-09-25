@@ -1,0 +1,184 @@
+name: Deploy to Staging
+
+# Required secret variables
+# - DISCORD_WEBHOOK
+# - REGISTRY_URL
+# - REGISTRY_USERNAME
+# - REGISTRY_PASSWORD
+# - SSH_HOST
+# - SSH_USERNAME
+# - SSH_KEY
+# - DEPLOY_PATH
+# - DEPLOY_URL
+# - CONTAINER_UID
+# - CONTAINER_GID
+# - TRAEFIK_IDENTIFIER
+# - APP_ENV
+# - APP_SECRET
+
+on:
+  push:
+    branches:
+      - 'release/**'
+
+env:
+  DOCKER_COMPOSE_FILES: -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.ssl.yml
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+      - name: Discord build start notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: "Starting staging build for {{ EVENT_PAYLOAD.repository.full_name }} on branch ${{ github.ref }}"
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Fetch docker cache
+        uses: satackey/action-docker-layer-caching@v0.0.11
+        # Ignore the failure of a step and avoid terminating the job.
+        continue-on-error: true
+
+      - name: Set up .env for building
+        uses: danielr1996/envsubst-action@1.0.0
+        env:
+          SITE_URL: ${{ secrets.DEPLOY_URL }}
+          CONTAINER_UID: ${{ secrets.CONTAINER_UID }}
+          CONTAINER_GID: ${{ secrets.CONTAINER_GID }}
+          TRAEFIK_IDENTIFIER: ${{ secrets.TRAEFIK_IDENTIFIER }}
+        with:
+          input: .env.dist
+          output: .env.local
+
+      - name: Build image(s)
+        run: docker-compose ${{ env.DOCKER_COMPOSE_FILES }} build
+
+      - name: Log in to private registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ secrets.REGISTRY_URL }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Push image(s)
+        run: docker-compose ${{ env.DOCKER_COMPOSE_FILES }} push
+
+      - name: Create deploy package
+        run: chmod +x deploy-package.sh && ./deploy-package.sh
+
+      - name: Ensure deploy path exists
+        uses: appleboy/ssh-action@master
+        env:
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          envs: DEPLOY_PATH
+          script: mkdir -p $DEPLOY_PATH
+
+      - name: Upload the deploy package
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "deploy.tar.gz"
+          target: ${{ secrets.DEPLOY_PATH }}
+
+      - name: Unpack deploy package
+        uses: appleboy/ssh-action@master
+        env:
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          envs: DEPLOY_PATH
+          script: cd $DEPLOY_PATH && tar -zxf deploy.tar.gz
+
+      - name: Log in to private registry on the server
+        uses: appleboy/ssh-action@master
+        env:
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+          REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+          REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          envs: REGISTRY_PASSWORD,REGISTRY_USERNAME,REGISTRY_URL,DEPLOY_PATH
+          script: |
+            echo "$REGISTRY_PASSWORD" > $DEPLOY_PATH/dockerlogin.txt
+            cat $DEPLOY_PATH/dockerlogin.txt | docker login --username $REGISTRY_USERNAME --password-stdin $REGISTRY_URL
+            rm -rf $DEPLOY_PATH/dockerlogin.txt
+
+      - name: Deploy the application
+        uses: appleboy/ssh-action@master
+        env:
+          SITE_URL: ${{ secrets.DEPLOY_URL }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          CONTAINER_UID: ${{ secrets.CONTAINER_UID }}
+          CONTAINER_GID: ${{ secrets.CONTAINER_GID }}
+          TRAEFIK_IDENTIFIER: ${{ secrets.TRAEFIK_IDENTIFIER }}
+          APP_ENV: ${{ secrets.APP_ENV }}
+          APP_SECRET: ${{ secrets.APP_SECRET }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          envs: SITE_URL,DEPLOY_PATH,CONTAINER_UID,CONTAINER_GID,TRAEFIK_IDENTIFIER,APP_ENV,APP_SECRET
+          script: |
+            cd $DEPLOY_PATH
+            export SITE_URL=$SITE_URL
+            export DEPLOY_PATH=$DEPLOY_PATH
+            export CONTAINER_UID=$CONTAINER_UID
+            export CONTAINER_GID=$CONTAINER_GID
+            export TRAEFIK_IDENTIFIER=$TRAEFIK_IDENTIFIER
+            export APP_ENV=$APP_ENV
+            export APP_SECRET=$APP_SECRET
+            chmod +x $DEPLOY_PATH/deploy.sh
+            $DEPLOY_PATH/deploy.sh
+
+      - name: Log out of the registry on the server
+        uses: appleboy/ssh-action@master
+        env:
+          REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          envs: REGISTRY_URL
+          script: |
+            docker logout $REGISTRY_URL
+            rm -rf $HOME/.docker/config.json
+
+      - name: Discord build start notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: "Staging build successful for {{ EVENT_PAYLOAD.repository.full_name }} on branch ${{ github.ref }}"
+
+  discord:
+    needs: build
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Get job conclusion
+        uses: technote-space/workflow-conclusion-action@v2
+
+      - name: Discord build start notification
+        if: env.WORKFLOW_CONCLUSION == 'failure' # notify only if failure
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: "Staging build FAILED for {{ EVENT_PAYLOAD.repository.full_name }} on branch ${{ github.ref }}"

@@ -1,0 +1,11 @@
+actor: ApiTester
+modules:
+  enabled:
+    - \App\Tests\_support\Helper\Api
+    - REST:
+        url: /v1/
+        depends: Symfony
+    - Symfony:
+        app_path: 'src'
+        environment: 'test'
+namespace: App\Tests\_support

@@ -1,0 +1,16 @@
+version: "3.7"
+
+# Required environment variables:
+# - TRAEFIK_IDENTIFIER
+# - SITE_URL
+
+services:
+  entrypoint:
+    labels:
+      - "traefik.http.middlewares.${TRAEFIK_IDENTIFIER}-redirect-websecure.redirectscheme.scheme=https"
+      - "traefik.http.routers.${TRAEFIK_IDENTIFIER}.middlewares=${TRAEFIK_IDENTIFIER}-redirect-websecure"
+      - "traefik.http.routers.${TRAEFIK_IDENTIFIER}-secure.rule=Host(`${SITE_URL}`)"
+      - "traefik.http.routers.${TRAEFIK_IDENTIFIER}-secure.entryPoints=websecure"
+      - "traefik.http.routers.${TRAEFIK_IDENTIFIER}-secure.tls=true"
+      - "traefik.http.routers.${TRAEFIK_IDENTIFIER}-secure.tls.certresolver=myresolver"
+      - "traefik.http.routers.${TRAEFIK_IDENTIFIER}-secure.service=${TRAEFIK_IDENTIFIER}"

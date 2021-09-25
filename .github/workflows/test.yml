@@ -1,0 +1,59 @@
+name: Run tests
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Discord build start notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: "Starting test run for {{ EVENT_PAYLOAD.repository.full_name }} on branch ${{ github.ref }}"
+
+      - uses: shivammathur/setup-php@b7d1d9c9a92d8d8463ce36d7f60da34d461724f8
+        with:
+          php-version: '8.0'
+          coverage: xdebug
+
+      - name: Copy .env
+        run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
+
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress
+
+      - name: Run tests
+        run: php vendor/bin/codecept run --coverage-text
+
+      - name: Check code coverage
+        run: chmod u+x check-coverage.sh && bash check-coverage.sh
+
+      - name: Discord test run end notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: "Test run successful for {{ EVENT_PAYLOAD.repository.full_name }} on branch ${{ github.ref }}"
+
+  discord:
+    needs: test
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Get job conclusion
+        uses: technote-space/workflow-conclusion-action@v2
+
+      - name: Discord test run failed notification
+        if: env.WORKFLOW_CONCLUSION == 'failure' # notify only if failure
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: "Test run FAILED for {{ EVENT_PAYLOAD.repository.full_name }} on branch ${{ github.ref }}"

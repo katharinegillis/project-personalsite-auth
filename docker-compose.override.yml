@@ -1,0 +1,13 @@
+version: "3.7"
+
+services:
+  entrypoint:
+    volumes:
+      - ./.docker/templates/:/etc/nginx/templates/
+      - ./public/:/var/www/html/public/
+
+  app:
+    build:
+      target: dev
+    volumes:
+      - ./:/var/www/html/
