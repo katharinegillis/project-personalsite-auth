@@ -11,3 +11,10 @@ services:
       - ./.env:/var/www/html/.env
       - ./var:/var/www/htmp/var
     restart: always
+    networks:
+      - default
+      - db
+
+networks:
+  db:
+    external: true

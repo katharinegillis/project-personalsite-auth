@@ -11,3 +11,29 @@ services:
       target: dev
     volumes:
       - ./:/var/www/html/
+
+  db:
+    image: mariadb:10.6.4
+    environment:
+      MYSQL_ROOT_PASSWORD: $DATABASE_ROOT_PASSWORD
+    volumes:
+      - db_data:/var/lib/mysql
+    labels:
+      - "traefik.enable=false"
+    ports:
+      - "3306:3306"
+
+  adminer:
+    image: adminer
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${TRAEFIK_IDENTIFIER}-adminer.rule=Host(`db.${SITE_URL}`)"
+      - "traefik.http.routers.${TRAEFIK_IDENTIFIER}-adminer.entryPoints=web"
+      - "traefik.http.routers.${TRAEFIK_IDENTIFIER}-adminer.service=${TRAEFIK_IDENTIFIER}-adminer"
+      - "traefik.http.services.${TRAEFIK_IDENTIFIER}-adminer.loadbalancer.server.port=8080"
+    networks:
+      - default
+      - traefik
+
+volumes:
+  db_data:
