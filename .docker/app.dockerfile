@@ -21,7 +21,8 @@ FROM php as tool
 USER root
 
 RUN apt update && apt install -y git zlib1g-dev libzip-dev unzip \
-    && docker-php-ext-install zip
+    && docker-php-ext-install zip \
+    && docker-php-ext-install pdo pdo_mysql
 
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug \
