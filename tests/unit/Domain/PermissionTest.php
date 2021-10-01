@@ -1,5 +1,5 @@
 <?php
-namespace App\Tests\unit;
+namespace App\Tests\unit\Domain;
 
 use App\Domain\Permission;
 use App\Tests\_support\UnitTester;
