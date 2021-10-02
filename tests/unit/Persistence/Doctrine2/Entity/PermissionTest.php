@@ -8,11 +8,6 @@ use Codeception\Test\Unit;
 class PermissionTest extends Unit
 {
     /**
-     * @var UnitTester
-     */
-    protected UnitTester $tester;
-
-    /**
      * @test
      */
     public function I_can_set_the_key_for_a_permission()
