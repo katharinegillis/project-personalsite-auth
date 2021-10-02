@@ -8,11 +8,6 @@ use Codeception\Test\Unit;
 class PermissionTest extends Unit
 {
     /**
-     * @var UnitTester
-     */
-    protected UnitTester $tester;
-
-    /**
      * @test
      */
     public function I_can_create_a_permission_with_given_data()
