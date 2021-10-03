@@ -53,9 +53,10 @@ jobs:
           CONTAINER_UID: ${{ secrets.CONTAINER_UID }}
           CONTAINER_GID: ${{ secrets.CONTAINER_GID }}
           TRAEFIK_IDENTIFIER: ${{ secrets.TRAEFIK_IDENTIFIER }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         with:
           input: .env.dist
-          output: .env.local
+          output: .env
 
       - name: Build image(s)
         run: docker-compose ${{ env.DOCKER_COMPOSE_FILES }} build
