@@ -2,7 +2,6 @@
 namespace App\Tests\unit\Persistence\Doctrine2\Entity;
 
 use App\Persistence\Doctrine2\Entity\Permission;
-use App\Tests\_support\UnitTester;
 use Codeception\Test\Unit;
 
 class PermissionTest extends Unit

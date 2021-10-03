@@ -71,14 +71,14 @@ class RoleTest extends Unit
         expect($role->getPermissions())->toBeInstanceOf(ArrayCollection::class);
         expect($role->getPermissions()->count())->toBe(count($permissions));
         foreach ($role->getPermissions() as $index => $permission) {
-            expect($permission)->toBe($permissions[$index]);
+            expect($permission)->toEqual($permissions[$index]);
         }
     }
 
     /**
      * @test
      */
-    public function I_can_add_permission_to_a_role()
+    public function I_can_add_a_permission_to_a_role()
     {
         $permissions = $this->createPermissions();
 
@@ -89,19 +89,19 @@ class RoleTest extends Unit
         expect($role->getPermissions())->toBeInstanceOf(ArrayCollection::class);
         expect($role->getPermissions()->count())->toBe(1);
         foreach ($role->getPermissions() as $index => $permission) {
-            expect($permission)->toBe($permissions[$index]);
+            expect($permission)->toEqual($permissions[$index]);
         }
 
         $role->addPermission($permissions[1]);
 
         expect($role->getPermissions()->count())->toBe(2);
-        expect($role->getPermissions()->get(1))->toBe($permissions[1]);
+        expect($role->getPermissions()->get(1))->toEqual($permissions[1]);
     }
 
     /**
      * @test
      */
-    public function I_cannot_add_permission_to_a_role_that_is_already_associated_with_that_permission()
+    public function I_cannot_add_a_permission_to_a_role_that_is_already_associated_with_that_permission()
     {
         $permissions = $this->createPermissions();
 
@@ -111,7 +111,7 @@ class RoleTest extends Unit
         $role->addPermission($permissions[1]);
 
         expect($role->getPermissions()->count())->toBe(2);
-        expect($role->getPermissions()->get(1))->toBe($permissions[1]);
+        expect($role->getPermissions()->get(1))->toEqual($permissions[1]);
     }
 
     /**
@@ -127,6 +127,6 @@ class RoleTest extends Unit
 
         $role->removePermission($permissions[0]);
         expect($role->getPermissions()->count())->toBe(count($permissions) - 1);
-        expect($role->getPermissions()->get(0))->toBe($permissions[1]);
+        expect($role->getPermissions()->get(0))->toEqual($permissions[1]);
     }
 }

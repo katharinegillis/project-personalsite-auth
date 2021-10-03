@@ -1,0 +1,7 @@
+actor: IntegrationTester
+modules:
+  enabled:
+    - \App\Tests\_support\Helper\Integration
+    - Symfony:
+        app_path: 'src'
+        environment: 'test'

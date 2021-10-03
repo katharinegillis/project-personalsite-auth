@@ -117,7 +117,7 @@ class Role
      */
     public function addPermission(Permission $permission): void
     {
-        if (!$this->permissions->contains($permission)) {
+        if (! $this->permissions->contains($permission)) {
             $this->permissions->add($permission);
         }
     }

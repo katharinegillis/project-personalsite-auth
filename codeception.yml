@@ -17,4 +17,4 @@ coverage:
         - src/*
     exclude:
         - src/Kernel.php
-        - src/Persistence/Doctrine2/Repository/PermissionRepository.php
+        - src/Persistence/Doctrine2/Repository/*

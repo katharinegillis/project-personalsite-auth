@@ -8,4 +8,3 @@ modules:
     - Symfony:
         app_path: 'src'
         environment: 'test'
-namespace: App\Tests\_support
