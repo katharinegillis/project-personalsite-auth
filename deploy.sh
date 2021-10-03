@@ -17,7 +17,7 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compos
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.ssl.yml up -d --remove-orphans
 
 # Update database
-docker-compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.ssl.yml exec app php bin/console doctrine:migrations:migrate --no-interaction
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml -f docker-compose.ssl.yml exec -T app php bin/console doctrine:migrations:migrate --no-interaction
 
 # Clean up old networks and images
 docker system prune -f
