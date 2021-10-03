@@ -5,8 +5,6 @@ namespace App\Persistence\Doctrine2\Entity;
 use App\Persistence\Doctrine2\Repository\RoleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\JoinTable;
-use Doctrine\ORM\Mapping\ManyToMany;
 use JetBrains\PhpStorm\Pure;
 
 /**
@@ -38,10 +36,10 @@ class Role
     private ?string $description = null;
 
     /**
-     * @ManyToMany(targetEntity="Permission")
-     * @JoinTable(name="role_permission",
-     *     joinColumns={@JoinColumn(name="role_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@JoinColumn(name="permission_id", referencedColumnName="id")}
+     * @ORM\ManyToMany(targetEntity="Permission")
+     * @ORM\JoinTable(name="role_permission",
+     *     joinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="permission_id", referencedColumnName="id")}
      * )
      */
     private ArrayCollection $permissions;
