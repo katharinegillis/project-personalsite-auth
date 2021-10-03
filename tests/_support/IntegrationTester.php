@@ -1,7 +1,7 @@
 <?php
 namespace App\Tests;
 
-use App\Tests\_generated\UnitTesterActions;
+use App\Tests\_generated\IntegrationTesterActions;
 
 /**
  * Inherited Methods
@@ -18,9 +18,9 @@ use App\Tests\_generated\UnitTesterActions;
  *
  * @SuppressWarnings(PHPMD)
 */
-class UnitTester extends \Codeception\Actor
+class IntegrationTester extends \Codeception\Actor
 {
-    use UnitTesterActions;
+    use IntegrationTesterActions;
 
     /**
      * Define custom actions here

@@ -1,8 +1,7 @@
 <?php
-namespace App\Tests\unit\Domain;
+namespace App\Tests\unit\Domain\Entity;
 
-use App\Domain\Permission;
-use App\Tests\_support\UnitTester;
+use App\Domain\Entity\Permission;
 use Codeception\Test\Unit;
 
 class PermissionTest extends Unit

@@ -1,5 +1,7 @@
 <?php
-namespace App\Tests\_support;
+namespace App\Tests;
+
+use App\Tests\_generated\ApiTesterActions;
 
 /**
  * Inherited Methods
@@ -18,7 +20,7 @@ namespace App\Tests\_support;
 */
 class ApiTester extends \Codeception\Actor
 {
-    use _generated\ApiTesterActions;
+    use ApiTesterActions;
 
     /**
      * Define custom actions here
