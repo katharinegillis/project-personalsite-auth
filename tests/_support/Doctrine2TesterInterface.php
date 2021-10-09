@@ -2,14 +2,15 @@
 
 namespace App\Tests\_support;
 
+use Doctrine\ORM\EntityManagerInterface;
+
 interface Doctrine2TesterInterface
 {
     /**
-     * @param $obj
-     * @param array $values
+     * @param $classNameOrInstance
+     * @param array $data
      * @return mixed
-     * @noinspection PhpMissingParamTypeInspection
      * @noinspection PhpMissingReturnTypeInspection
      */
-    public function persistEntity($obj, $values = []);
+    public function haveInRepository($classNameOrInstance, array $data = []);
 }

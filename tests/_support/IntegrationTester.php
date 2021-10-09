@@ -5,6 +5,7 @@ use App\Tests\_generated\IntegrationTesterActions;
 use App\Tests\_support\Doctrine2TesterInterface;
 use Codeception\Actor;
 use Codeception\Verify\Verifiers\VerifyAny;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Inherited Methods
@@ -24,13 +25,4 @@ use Codeception\Verify\Verifiers\VerifyAny;
 class IntegrationTester extends Actor implements Doctrine2TesterInterface
 {
     use IntegrationTesterActions;
-
-    /**
-     * @param mixed $actual
-     * @return VerifyAny
-     */
-    public function canVerify(mixed $actual): VerifyAny
-    {
-        return verify($actual);
-    }
 }

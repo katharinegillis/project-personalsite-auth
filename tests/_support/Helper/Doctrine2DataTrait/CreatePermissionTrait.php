@@ -19,7 +19,7 @@ trait CreatePermissionTrait
     {
         $permission = new Permission($permissionKey, $name, $description);
 
-        $I->persistEntity($permission);
+        $I->haveInRepository($permission);
 
         return $permission;
     }

@@ -21,7 +21,7 @@ trait CreateRoleTrait
     {
         $role = new Role($name, $description, $permissions);
 
-        $I->persistEntity($role);
+        $I->haveInRepository($role);
 
         return $role;
     }
