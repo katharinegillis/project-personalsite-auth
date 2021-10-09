@@ -39,7 +39,7 @@ jobs:
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress
 
       - name: Run doctrine migrations
-        run: php bin/console doctrine:migrations:migrate --no-interaction
+        run: php bin/console doctrine:migrations:migrate --no-interaction --env=test
 
       - name: Run tests
         run: php vendor/bin/codecept run --coverage-text
