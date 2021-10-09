@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Tests\_support\Helper;
+namespace App\Tests\_support\Helper\DependencyTrait;
 
 use App\Common\ArrayCollectionInterface;
 use Codeception\Stub;
 use Exception;
 use JetBrains\PhpStorm\ArrayShape;
 
-trait CreateArrayCollectionInterface
+trait CreateArrayCollectionInterfaceTrait
 {
     /**
      * @param array $array

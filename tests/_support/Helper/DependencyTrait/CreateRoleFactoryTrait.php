@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Tests\_support\Helper;
+namespace App\Tests\_support\Helper\DependencyTrait;
 
-use App\Common\ArrayCollectionFactoryInterface;
 use App\Common\ArrayCollectionInterface;
 use App\Domain\Entity\Role;
 use App\Domain\Factory\RoleFactory;
@@ -10,9 +9,9 @@ use Codeception\Stub;
 use Exception;
 use JetBrains\PhpStorm\ArrayShape;
 
-trait CreateRoleFactory
+trait CreateRoleFactoryTrait
 {
-    use CreateArrayCollectionFactoryInterface;
+    use CreateArrayCollectionFactoryInterfaceTrait;
 
     /**
      * @param array|null $roleFactoryParams

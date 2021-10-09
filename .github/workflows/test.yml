@@ -12,9 +12,9 @@ jobs:
         image: mariadb:10.6.4
         env:
           MYSQL_ROOT_PASSWORD: symfony
-          MYSQL_DATABASE: symfony
+          MYSQL_DATABASE: symfony_test
         ports:
-          - 3306/tcp
+          - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=10s --health-retries=10
 
     steps:
@@ -37,6 +37,9 @@ jobs:
 
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress
+
+      - name: Run doctrine migrations
+        run: php bin/console doctrine:migrations:migrate --no-interaction --env=test
 
       - name: Run tests
         run: php vendor/bin/codecept run --coverage-text

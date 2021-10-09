@@ -3,9 +3,7 @@ namespace App\Tests\integration\Common;
 
 use App\Common\Doctrine2ArrayCollection;
 use Codeception\Test\Unit;
-use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
-use PhpParser\Comment\Doc;
 
 class Doctrine2ArrayCollectionTest extends Unit
 {
@@ -208,5 +206,18 @@ class Doctrine2ArrayCollectionTest extends Unit
         $arrayCollection->rewind();
 
         expect($arrayCollection->current())->toEqual(10);
+    }
+
+    /**
+     * @test
+     */
+    public function I_can_check_that_the_array_collection_contains_a_particular_key()
+    {
+        $data = [ 'a' => 10, 'b' => 20, 'c' => 30 ];
+
+        $arrayCollection = new Doctrine2ArrayCollection($data);
+
+        expect($arrayCollection->containsKey('a'))->toBeTrue();
+        expect($arrayCollection->containsKey(0))->toBeFalse();
     }
 }

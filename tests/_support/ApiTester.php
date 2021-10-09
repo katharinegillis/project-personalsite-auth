@@ -1,7 +1,10 @@
-<?php
+<?php /** @noinspection PhpIllegalPsrClassPathInspection */
+
 namespace App\Tests;
 
 use App\Tests\_generated\ApiTesterActions;
+use Codeception\Actor;
+use Codeception\Verify\Verifiers\VerifyAny;
 
 /**
  * Inherited Methods
@@ -18,11 +21,16 @@ use App\Tests\_generated\ApiTesterActions;
  *
  * @SuppressWarnings(PHPMD)
 */
-class ApiTester extends \Codeception\Actor
+class ApiTester extends Actor
 {
     use ApiTesterActions;
 
     /**
-     * Define custom actions here
+     * @param mixed $actual
+     * @return VerifyAny
      */
+    public function canVerify(mixed $actual): VerifyAny
+    {
+        return verify($actual);
+    }
 }

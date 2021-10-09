@@ -34,8 +34,14 @@ interface ArrayCollectionInterface extends Iterator
     public function count(): int;
 
     /**
-     * @param int $index
+     * @param mixed $key
      * @return mixed
      */
-    public function get(int $index): mixed;
+    public function get(mixed $key): mixed;
+
+    /**
+     * @param mixed $key
+     * @return bool
+     */
+    public function containsKey(mixed $key): bool;
 }

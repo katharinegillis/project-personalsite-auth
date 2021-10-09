@@ -5,24 +5,24 @@ namespace App\Domain\Entity;
 class Permission
 {
     protected ?int $id = null;
-    protected ?string $key = null;
+    protected ?string $permissionKey = null;
     protected ?string $name = null;
     protected ?string $description = null;
 
     /**
      * @param int|null $id
-     * @param string|null $key
+     * @param string|null $permissionKey
      * @param string|null $name
      * @param string|null $description
      */
-    public function __construct(?int $id = null, ?string $key = null, ?string $name = null, ?string $description = null)
+    public function __construct(?int $id = null, ?string $permissionKey = null, ?string $name = null, ?string $description = null)
     {
         if (isset($id)) {
             $this->setId($id);
         }
 
-        if (isset($key)) {
-            $this->setKey($key);
+        if (isset($permissionKey)) {
+            $this->setPermissionKey($permissionKey);
         }
 
         if (isset($name)) {
@@ -53,17 +53,17 @@ class Permission
     /**
      * @return string|null
      */
-    public function getKey(): ?string
+    public function getPermissionKey(): ?string
     {
-        return $this->key;
+        return $this->permissionKey;
     }
 
     /**
-     * @param string|null $key
+     * @param string|null $permissionKey
      */
-    public function setKey(?string $key): void
+    public function setPermissionKey(?string $permissionKey): void
     {
-        $this->key = $key;
+        $this->permissionKey = $permissionKey;
     }
 
     /**

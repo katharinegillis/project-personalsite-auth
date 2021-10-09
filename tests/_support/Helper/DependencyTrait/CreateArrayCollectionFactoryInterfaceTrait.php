@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Tests\_support\Helper;
+namespace App\Tests\_support\Helper\DependencyTrait;
 
 use App\Common\ArrayCollectionFactoryInterface;
 use Codeception\Stub;
 use Exception;
 use JetBrains\PhpStorm\ArrayShape;
 
-trait CreateArrayCollectionFactoryInterface
+trait CreateArrayCollectionFactoryInterfaceTrait
 {
-    use CreateArrayCollectionInterface;
+    use CreateArrayCollectionInterfaceTrait;
 
     /**
      * @param array|null $arrayCollectionFactoryInterfaceParams

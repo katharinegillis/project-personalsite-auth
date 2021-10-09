@@ -18,4 +18,37 @@ class PermissionRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Permission::class);
     }
+
+    /**
+     * @param int $roleId
+     * @return Permission[]
+     */
+    public function findByRoleId(int $roleId): array
+    {
+        $entityManager = $this->getEntityManager();
+
+        $dql = <<<DQL
+SELECT
+    p
+FROM
+    App\Persistence\Doctrine2\Entity\Permission p
+WHERE
+    p.id IN (
+        SELECT
+            p2.id
+        FROM
+            App\Persistence\Doctrine2\Entity\Role r
+        JOIN
+            r.permissions p2
+        WHERE
+            r.id = :roleId
+    )
+DQL;
+
+
+        $query = $entityManager->createQuery($dql)
+            ->setParameter('roleId', $roleId);
+
+        return $query->getResult();
+    }
 }
