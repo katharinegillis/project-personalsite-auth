@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace App\Tests\unit\Domain\Entity;
 
 use App\Common\ArrayCollectionInterface;

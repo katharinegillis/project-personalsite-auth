@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpPropertyOnlyWrittenInspection */
+<?php declare(strict_types=1);
 
 namespace App\Persistence\Doctrine2\Entity;
 
@@ -19,21 +19,21 @@ class Role
      *
      * @var int
      */
-    private int $id;
+    protected int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      *
      * @var string
      */
-    private string $name;
+    protected string $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      *
      * @var ?string
      */
-    private ?string $description = null;
+    protected ?string $description = null;
 
     /**
      * @ORM\ManyToMany(targetEntity="Permission")
@@ -42,7 +42,7 @@ class Role
      *     inverseJoinColumns={@ORM\JoinColumn(name="permission_id", referencedColumnName="id")}
      * )
      */
-    private Collection $permissions;
+    protected Collection $permissions;
 
     /**
      * @param string|null $name

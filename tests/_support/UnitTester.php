@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpIllegalPsrClassPathInspection */
+<?php declare(strict_types=1); /** @noinspection PhpIllegalPsrClassPathInspection */
 namespace App\Tests;
 
 use App\Tests\_generated\UnitTesterActions;

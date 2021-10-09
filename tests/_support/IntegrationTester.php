@@ -1,11 +1,9 @@
-<?php /** @noinspection PhpIllegalPsrClassPathInspection */
+<?php declare(strict_types=1); /** @noinspection PhpIllegalPsrClassPathInspection */
 namespace App\Tests;
 
 use App\Tests\_generated\IntegrationTesterActions;
 use App\Tests\_support\Doctrine2TesterInterface;
 use Codeception\Actor;
-use Codeception\Verify\Verifiers\VerifyAny;
-use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Inherited Methods

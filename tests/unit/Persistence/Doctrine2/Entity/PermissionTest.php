@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace App\Tests\unit\Persistence\Doctrine2\Entity;
 
 use App\Persistence\Doctrine2\Entity\Permission;
