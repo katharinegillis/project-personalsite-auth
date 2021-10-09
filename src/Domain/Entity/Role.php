@@ -4,15 +4,17 @@ namespace App\Domain\Entity;
 
 use App\Common\ArrayCollectionFactoryInterface;
 use App\Common\ArrayCollectionInterface;
+use Closure;
 
 class Role
 {
     protected ?int $id = null;
     protected ?string $name = null;
     protected ?string $description = null;
-    protected ArrayCollectionInterface $permissions;
+    protected ?ArrayCollectionInterface $permissions = null;
 
     protected ArrayCollectionFactoryInterface $arrayCollectionFactory;
+    protected ?Closure $permissionLoader = null;
 
     /**
      * @param ArrayCollectionFactoryInterface $arrayCollectionFactory
@@ -39,8 +41,6 @@ class Role
 
         if (isset($permissions)) {
             $this->setPermissions($permissions);
-        } else {
-            $this->permissions = $this->arrayCollectionFactory->create();
         }
     }
 
@@ -97,6 +97,8 @@ class Role
      */
     public function getPermissions(): ArrayCollectionInterface
     {
+        $this->loadPermissions();
+
         return $this->permissions;
     }
 
@@ -117,6 +119,8 @@ class Role
      */
     public function addPermission(Permission $permission): void
     {
+        $this->loadPermissions();
+
         if (! $this->permissions->contains($permission)) {
             $this->permissions->add($permission);
         }
@@ -127,7 +131,31 @@ class Role
      */
     public function removePermission(Permission $permission): void
     {
+        $this->loadPermissions();
+
         $this->permissions->removeElement($permission);
         $this->permissions = $this->arrayCollectionFactory->create($this->permissions->getValues());
+    }
+
+    /**
+     * @param Closure $permissionLoader
+     */
+    public function setPermissionLoader(Closure $permissionLoader): void
+    {
+        $this->permissionLoader = $permissionLoader;
+    }
+
+    protected function loadPermissions(): void
+    {
+        if (null !== $this->permissions) {
+            return;
+        }
+
+        if (null !== $this->permissionLoader) {
+            $closure = $this->permissionLoader;
+            $this->setPermissions($closure());
+        } else {
+            $this->setPermissions([]);
+        }
     }
 }

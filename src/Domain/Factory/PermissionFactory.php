@@ -8,13 +8,13 @@ class PermissionFactory
 {
     /**
      * @param int|null $id
-     * @param string|null $key
+     * @param string|null $permissionKey
      * @param string|null $name
      * @param string|null $description
      * @return Permission
      */
-    public function create(?int $id = null, ?string $key = null, ?string $name = null, ?string $description = null): Permission
+    public function create(?int $id = null, ?string $permissionKey = null, ?string $name = null, ?string $description = null): Permission
     {
-        return new Permission($id, $key, $name, $description);
+        return new Permission($id, $permissionKey, $name, $description);
     }
 }

@@ -24,7 +24,7 @@ class Permission
      *
      * @var string
      */
-    private string $key;
+    private string $permissionKey;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -41,6 +41,26 @@ class Permission
     private ?string $description = null;
 
     /**
+     * @param string|null $permissionKey
+     * @param string|null $name
+     * @param string|null $description
+     */
+    public function __construct(?string $permissionKey = null, ?string $name = null, ?string $description = null)
+    {
+        if (null !== $permissionKey) {
+            $this->setPermissionKey($permissionKey);
+        }
+
+        if (null !== $name) {
+            $this->setName($name);
+        }
+
+        if (null !== $description) {
+            $this->setDescription($description);
+        }
+    }
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -51,17 +71,17 @@ class Permission
     /**
      * @return string
      */
-    public function getKey(): string
+    public function getPermissionKey(): string
     {
-        return $this->key;
+        return $this->permissionKey;
     }
 
     /**
-     * @param string $key
+     * @param string $permissionKey
      */
-    public function setKey(string $key): void
+    public function setPermissionKey(string $permissionKey): void
     {
-        $this->key = $key;
+        $this->permissionKey = $permissionKey;
     }
 
     /**

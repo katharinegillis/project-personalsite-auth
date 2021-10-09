@@ -5,3 +5,6 @@ modules:
     - Symfony:
         app_path: 'src'
         environment: 'test'
+    - Doctrine2:
+        cleanup: true
+        depends: Symfony

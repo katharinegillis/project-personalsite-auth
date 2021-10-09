@@ -12,14 +12,14 @@ class PermissionTest extends Unit
     public function I_can_create_a_permission_with_given_data()
     {
         $id = 1;
-        $key = 'can_generate_tinygraph_image';
+        $permissionKey = 'can_generate_tinygraph_image';
         $name = 'Can Generate TinyGraph Image';
         $description = 'Allows the user to generate and retrieve a TinyGraph image.';
 
-        $permission = new Permission($id, $key, $name, $description);
+        $permission = new Permission($id, $permissionKey, $name, $description);
 
         expect($permission->getId())->toBe($id);
-        expect($permission->getKey())->toBe($key);
+        expect($permission->getPermissionKey())->toBe($permissionKey);
         expect($permission->getName())->toBe($name);
         expect($permission->getDescription())->toBe($description);
     }
@@ -32,7 +32,7 @@ class PermissionTest extends Unit
         $permission = new Permission();
 
         expect($permission->getId())->toBeNull();
-        expect($permission->getKey())->toBeNull();
+        expect($permission->getPermissionKey())->toBeNull();
         expect($permission->getName())->toBeNull();
         expect($permission->getDescription())->toBeNull();
     }
@@ -42,15 +42,15 @@ class PermissionTest extends Unit
      */
     public function I_can_set_the_key_for_a_permission()
     {
-        $key = 'can_generate_tinygraph_image';
+        $permissionKey = 'can_generate_tinygraph_image';
 
         $permission = new Permission();
 
-        expect($permission->getKey())->toBeNull();
+        expect($permission->getPermissionKey())->toBeNull();
 
-        $permission->setKey($key);
+        $permission->setPermissionKey($permissionKey);
 
-        expect($permission->getKey())->toBe($key);
+        expect($permission->getPermissionKey())->toBe($permissionKey);
     }
 
     /**

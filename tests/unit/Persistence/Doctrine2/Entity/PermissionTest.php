@@ -9,15 +9,31 @@ class PermissionTest extends Unit
     /**
      * @test
      */
+    public function I_can_create_a_new_permission_with_the_given_data()
+    {
+        $permissionKey = 'can_generate_tinygraph_image';
+        $name = 'Can Generate TinyGraph Image';
+        $description = 'Allows the user to generate and retrieve a TinyGraph image.';
+
+        $permission = new Permission($permissionKey, $name, $description);
+
+        expect($permission->getPermissionKey())->toBe($permissionKey);
+        expect($permission->getName())->toBe($name);
+        expect($permission->getDescription())->toBe($description);
+    }
+
+    /**
+     * @test
+     */
     public function I_can_set_the_key_for_a_permission()
     {
-        $key = 'can_generate_tinygraph_image';
+        $permissionKey = 'can_generate_tinygraph_image';
 
         $permission = new Permission();
 
-        $permission->setKey($key);
+        $permission->setPermissionKey($permissionKey);
 
-        expect($permission->getKey())->toBe($key);
+        expect($permission->getPermissionKey())->toBe($permissionKey);
     }
 
     /**

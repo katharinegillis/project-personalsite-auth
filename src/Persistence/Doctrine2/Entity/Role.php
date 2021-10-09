@@ -4,8 +4,8 @@ namespace App\Persistence\Doctrine2\Entity;
 
 use App\Persistence\Doctrine2\Repository\RoleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JetBrains\PhpStorm\Pure;
 
 /**
  * @ORM\Entity(repositoryClass=RoleRepository::class)
@@ -42,11 +42,24 @@ class Role
      *     inverseJoinColumns={@ORM\JoinColumn(name="permission_id", referencedColumnName="id")}
      * )
      */
-    private ArrayCollection $permissions;
+    private Collection $permissions;
 
-    #[Pure] public function __construct()
+    /**
+     * @param string|null $name
+     * @param string|null $description
+     * @param array $permissions
+     */
+    public function __construct(?string $name = null, ?string $description = null, array $permissions = [])
     {
-        $this->permissions = new ArrayCollection();
+        if (null !== $name) {
+            $this->setName($name);
+        }
+
+        if (null !== $description) {
+            $this->setDescription($description);
+        }
+
+        $this->setPermissions($permissions);
     }
 
     /**
@@ -90,19 +103,19 @@ class Role
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getPermissions(): ArrayCollection
+    public function getPermissions(): Collection
     {
         return $this->permissions;
     }
 
     /**
-     * @param array|ArrayCollection $permissions
+     * @param array|Collection $permissions
      */
-    public function setPermissions(array|ArrayCollection $permissions): void
+    public function setPermissions(array|Collection $permissions): void
     {
-        if ($permissions instanceof ArrayCollection) {
+        if ($permissions instanceof Collection) {
             $this->permissions = $permissions;
             return;
         }

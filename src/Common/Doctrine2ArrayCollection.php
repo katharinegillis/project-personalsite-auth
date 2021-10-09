@@ -61,9 +61,9 @@ class Doctrine2ArrayCollection implements ArrayCollectionInterface
     /**
      * @inheritDoc
      */
-    public function get(int $index): mixed
+    public function get(mixed $key): mixed
     {
-        return $this->arrayCollection->get($index);
+        return $this->arrayCollection->get($key);
     }
 
     /**
@@ -109,5 +109,13 @@ class Doctrine2ArrayCollection implements ArrayCollectionInterface
     public function rewind()
     {
         $this->arrayCollection->first();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function containsKey(mixed $key): bool
+    {
+        return $this->arrayCollection->containsKey($key);
     }
 }

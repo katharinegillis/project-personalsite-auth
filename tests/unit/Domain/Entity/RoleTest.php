@@ -4,13 +4,13 @@ namespace App\Tests\unit\Domain\Entity;
 use App\Common\ArrayCollectionInterface;
 use App\Domain\Entity\Permission;
 use App\Domain\Entity\Role;
-use App\Tests\_support\Helper\CreateArrayCollectionFactoryInterface;
+use App\Tests\_support\Helper\DependencyTrait\CreateArrayCollectionFactoryInterfaceTrait;
 use Codeception\Test\Unit;
 use Exception;
 
 class RoleTest extends Unit
 {
-    use CreateArrayCollectionFactoryInterface;
+    use CreateArrayCollectionFactoryInterfaceTrait;
 
     /**
      * @test
@@ -202,6 +202,7 @@ class RoleTest extends Unit
 
     /**
      * @test
+     * @throws Exception
      */
     public function I_cannot_add_a_permission_to_a_role_that_is_already_associated_with_that_permission()
     {
@@ -250,5 +251,40 @@ class RoleTest extends Unit
 
         expect($role->getPermissions()->count())->toBe(1);
         expect($role->getPermissions()->get(0))->toEqual($permissions[1]);
+    }
+
+    /**
+     * @test
+     * @throws Exception
+     */
+    public function I_can_lazy_load_permissions_from_a_closure_for_a_role()
+    {
+        $arrayCollectionFactory = $this->createArrayCollectionFactoryInterface();
+
+        $role = new Role($arrayCollectionFactory);
+
+        $permissions = [
+            new Permission(
+                1,
+                'can_generate_tinygraph_image',
+                'Can Generate TinyGraph Image',
+                'Allows the user to generate and retrieve a TinyGraph image.'
+            ),
+            new Permission(
+                2,
+                'can_view_github_repositories',
+                'Can View GitHub Repositories',
+                'Allows the user to view the GitHub repositories.'
+            ),
+        ];
+
+        $role->setPermissionLoader(function () use ($permissions) {
+            return $permissions;
+        });
+
+        expect($role->getPermissions()->count())->toBe(count($permissions));
+        foreach ($role->getPermissions() as $index => $permission) {
+            expect($permission)->toEqual($permissions[$index]);
+        }
     }
 }

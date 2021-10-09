@@ -5,6 +5,7 @@ use App\Persistence\Doctrine2\Entity\Permission;
 use App\Persistence\Doctrine2\Entity\Role;
 use Codeception\Test\Unit;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 class RoleTest extends Unit
 {
@@ -14,12 +15,12 @@ class RoleTest extends Unit
     protected function createPermissions(): array
     {
         $permission1 = new Permission();
-        $permission1->setKey('can_generate_tinygraph_image');
+        $permission1->setPermissionKey('can_generate_tinygraph_image');
         $permission1->setName('Can Generate TinyGraph Image');
         $permission1->setDescription('Allows the user to generate and retrieve a TinyGraph image.');
 
         $permission2 = new Permission();
-        $permission2->setKey('can_view_github_repositories');
+        $permission2->setPermissionKey('can_view_github_repositories');
         $permission2->setName('Can View GitHub Repositories');
         $permission2->setDescription('Allows the user to view the GitHub repositories.');
 
@@ -27,6 +28,25 @@ class RoleTest extends Unit
             $permission1,
             $permission2,
         ];
+    }
+
+    /**
+     * @test
+     */
+    public function I_can_create_a_new_role_with_the_given_data()
+    {
+        $name = 'Public';
+        $description = 'A role that defines what functionality an unauthenticated user can access.';
+        $permissions = $this->createPermissions();
+
+        $role = new Role($name, $description, $permissions);
+
+        expect($role->getName())->toBe($name);
+        expect($role->getDescription())->toBe($description);
+        expect($role->getPermissions()->count())->toBe(count($permissions));
+        foreach ($role->getPermissions() as $index => $permission) {
+            expect($permission)->toEqual($permissions[$index]);
+        }
     }
 
     /**
@@ -60,7 +80,7 @@ class RoleTest extends Unit
     /**
      * @test
      */
-    public function I_can_set_the_permissions_for_a_role()
+    public function I_can_set_the_permissions_as_an_array_for_a_role()
     {
         $permissions = $this->createPermissions();
 
@@ -68,7 +88,25 @@ class RoleTest extends Unit
 
         $role->setPermissions($permissions);
 
-        expect($role->getPermissions())->toBeInstanceOf(ArrayCollection::class);
+        expect($role->getPermissions())->toBeInstanceOf(Collection::class);
+        expect($role->getPermissions()->count())->toBe(count($permissions));
+        foreach ($role->getPermissions() as $index => $permission) {
+            expect($permission)->toEqual($permissions[$index]);
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function I_can_set_the_permissions_as_a_collection_for_a_role()
+    {
+        $permissions = $this->createPermissions();
+
+        $role = new Role();
+
+        $role->setPermissions(new ArrayCollection($permissions));
+
+        expect($role->getPermissions())->toBeInstanceOf(Collection::class);
         expect($role->getPermissions()->count())->toBe(count($permissions));
         foreach ($role->getPermissions() as $index => $permission) {
             expect($permission)->toEqual($permissions[$index]);
@@ -86,7 +124,7 @@ class RoleTest extends Unit
 
         $role->setPermissions([$permissions[0]]);
 
-        expect($role->getPermissions())->toBeInstanceOf(ArrayCollection::class);
+        expect($role->getPermissions())->toBeInstanceOf(Collection::class);
         expect($role->getPermissions()->count())->toBe(1);
         foreach ($role->getPermissions() as $index => $permission) {
             expect($permission)->toEqual($permissions[$index]);

@@ -18,7 +18,8 @@
         "symfony/framework-bundle": "5.3.*",
         "symfony/proxy-manager-bridge": "5.3.*",
         "symfony/runtime": "5.3.*",
-        "symfony/yaml": "5.3.*"
+        "symfony/yaml": "5.3.*",
+        "ext-pdo": "*"
     },
     "require-dev": {
         "codeception/codeception": "^4.1",
@@ -27,6 +28,7 @@
         "codeception/module-rest": "^1.3",
         "codeception/module-symfony": "^2.0",
         "codeception/verify": "^2.1",
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "symfony/maker-bundle": "^1.34"
     },
     "config": {
