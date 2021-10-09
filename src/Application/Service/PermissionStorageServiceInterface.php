@@ -2,7 +2,7 @@
 
 namespace App\Application\Service;
 
-use App\Domain\Entity\Permission;
+use App\Domain\Entity\Permission\Permission;
 
 interface PermissionStorageServiceInterface
 {

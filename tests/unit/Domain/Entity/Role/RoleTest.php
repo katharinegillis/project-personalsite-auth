@@ -1,9 +1,11 @@
 <?php declare(strict_types=1);
-namespace App\Tests\unit\Domain\Entity;
 
-use App\Common\ArrayCollectionInterface;
-use App\Domain\Entity\Permission;
-use App\Domain\Entity\Role;
+namespace App\Tests\unit\Domain\Entity\Role;
+
+use App\Common\ArrayCollection\ArrayCollectionInterface;
+use App\Domain\Entity\Permission\Permission;
+use App\Domain\Entity\Role\Role;
+use App\Tests\_support\Helper\AssertionTrait\CheckRoleTrait;
 use App\Tests\_support\Helper\DependencyTrait\CreateArrayCollectionFactoryInterfaceTrait;
 use Codeception\Test\Unit;
 use Exception;
@@ -11,6 +13,7 @@ use Exception;
 class RoleTest extends Unit
 {
     use CreateArrayCollectionFactoryInterfaceTrait;
+    use CheckRoleTrait;
 
     /**
      * @test
@@ -39,13 +42,7 @@ class RoleTest extends Unit
 
         $role = new Role($arrayCollectionFactory, $id, $name, $description, $permissions);
 
-        expect($role->getId())->toBe($id);
-        expect($role->getName())->toBe($name);
-        expect($role->getDescription())->toBe($description);
-        expect($role->getPermissions())->toBeInstanceOf(ArrayCollectionInterface::class);
-        foreach ($role->getPermissions() as $index => $permission) {
-            expect($permission)->toEqual($permissions[$index]);
-        }
+        $this->checkRole($role, $id, $name, $description, $permissions);
     }
 
     /**
@@ -58,11 +55,7 @@ class RoleTest extends Unit
 
         $role = new Role($arrayCollectionFactory);
 
-        expect($role->getId())->toBeNull();
-        expect($role->getName())->toBeNull();
-        expect($role->getDescription())->toBeNull();
-        expect($role->getPermissions())->toBeInstanceOf(ArrayCollectionInterface::class);
-        expect($role->getPermissions()->count())->toBe(0);
+        $this->checkRole($role, null, null, null, []);
     }
 
     /**

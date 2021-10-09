@@ -12,7 +12,12 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         public: true
 
-    # makes classes in src/ available to be used as services
+    _instanceof:
+        App\Common\CQRS\Query\QueryHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: query.bus }
+
+    # make classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
@@ -21,9 +26,10 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
             - '../src/Tests/'
+            - '../src/Application/Query/*Query.php'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\Common\ArrayCollectionFactoryInterface:
-        class: App\Common\Doctrine2ArrayCollectionFactory
+    App\Common\ArrayCollection\ArrayCollectionFactoryInterface:
+        class: App\Common\ArrayCollection\Doctrine2\Doctrine2ArrayCollectionFactory
         public: true

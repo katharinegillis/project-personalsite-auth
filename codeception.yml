@@ -17,4 +17,5 @@ coverage:
         - src/*
     exclude:
         - src/Kernel.php
+        - src/Common/CQRS/*
         - src/Persistence/Doctrine2/Repository/RoleRepository

@@ -2,13 +2,13 @@
 
 namespace App\Application\Service;
 
-use App\Domain\Entity\Role;
+use App\Domain\Entity\Role\RoleInterface;
 
 interface RoleStorageServiceInterface
 {
     /**
      * @param string $name
-     * @return Role
+     * @return RoleInterface
      */
-    public function findByName(string $name): Role;
+    public function findByName(string $name): RoleInterface;
 }

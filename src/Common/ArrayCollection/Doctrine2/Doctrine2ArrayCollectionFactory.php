@@ -1,7 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace App\Common;
+namespace App\Common\ArrayCollection\Doctrine2;
 
+use App\Common\ArrayCollection\ArrayCollectionFactoryInterface;
+use App\Common\ArrayCollection\ArrayCollectionInterface;
 use JetBrains\PhpStorm\Pure;
 
 class Doctrine2ArrayCollectionFactory implements ArrayCollectionFactoryInterface

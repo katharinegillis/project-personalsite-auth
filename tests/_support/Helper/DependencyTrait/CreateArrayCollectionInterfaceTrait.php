@@ -2,7 +2,7 @@
 
 namespace App\Tests\_support\Helper\DependencyTrait;
 
-use App\Common\ArrayCollectionInterface;
+use App\Common\ArrayCollection\ArrayCollectionInterface;
 use Codeception\Stub;
 use Exception;
 use JetBrains\PhpStorm\ArrayShape;
