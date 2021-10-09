@@ -1,8 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Tests\_support;
-
-use Doctrine\ORM\EntityManagerInterface;
 
 interface Doctrine2TesterInterface
 {

@@ -1,8 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Tests\_support\Helper\DependencyTrait;
 
-use App\Common\ArrayCollectionFactoryInterface;
+use App\Common\ArrayCollection\ArrayCollectionFactoryInterface;
 use Codeception\Stub;
 use Exception;
 use JetBrains\PhpStorm\ArrayShape;

@@ -1,9 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Persistence\Doctrine2\Service;
 
 use App\Application\Service\PermissionStorageServiceInterface;
-use App\Domain\Entity\Permission;
+use App\Domain\Entity\Permission\Permission;
+use App\Domain\Entity\Permission\PermissionInterface;
 use App\Domain\Factory\PermissionFactory;
 use App\Persistence\Doctrine2\Entity\Permission as Doctrine2Permission;
 use App\Persistence\Doctrine2\Repository\PermissionRepository;
@@ -44,7 +45,7 @@ class PermissionStorageService implements PermissionStorageServiceInterface
      * @param Doctrine2Permission $doctrine2Permission
      * @return Permission
      */
-    public function convertToDomain(Doctrine2Permission $doctrine2Permission): Permission
+    public function convertToDomain(Doctrine2Permission $doctrine2Permission): PermissionInterface
     {
         return $this->permissionFactory->create(
             $doctrine2Permission->getId(),

@@ -1,7 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 namespace App\Tests\integration\Common;
 
-use App\Common\Doctrine2ArrayCollection;
+use App\Common\ArrayCollection\Doctrine2\Doctrine2ArrayCollection;
 use Codeception\Test\Unit;
 use Exception;
 

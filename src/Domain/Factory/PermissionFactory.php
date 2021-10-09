@@ -1,8 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Domain\Factory;
 
-use App\Domain\Entity\Permission;
+use App\Domain\Entity\Permission\NullPermission;
+use App\Domain\Entity\Permission\Permission;
 
 class PermissionFactory
 {
@@ -16,5 +17,13 @@ class PermissionFactory
     public function create(?int $id = null, ?string $permissionKey = null, ?string $name = null, ?string $description = null): Permission
     {
         return new Permission($id, $permissionKey, $name, $description);
+    }
+
+    /**
+     * @return NullPermission
+     */
+    public function createNull(): NullPermission
+    {
+        return new NullPermission();
     }
 }

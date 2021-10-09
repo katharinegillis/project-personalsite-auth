@@ -1,8 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Tests\integration\Persistence\Doctrine2\Service;
 
-use App\Domain\Entity\Permission;
+use App\Domain\Entity\Permission\PermissionInterface;
 use App\Persistence\Doctrine2\Entity\Permission as Doctrine2Permission;
 use App\Persistence\Doctrine2\Entity\Role;
 use App\Persistence\Doctrine2\Service\PermissionStorageService;
@@ -36,7 +36,7 @@ class PermissionStorageServiceTest extends Unit
 
         expect($permissions)->arrayToHaveCount($publicRole->getPermissions()->count());
         foreach ($permissions as $index => $permission) {
-            expect($permission)->toBeInstanceOf(Permission::class);
+            expect($permission)->toBeInstanceOf(PermissionInterface::class);
 
             /** @var Doctrine2Permission $doctrine2Permission */
             $doctrine2Permission = $publicRole->getPermissions()->get($index);

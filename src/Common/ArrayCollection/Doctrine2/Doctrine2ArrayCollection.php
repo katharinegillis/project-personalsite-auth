@@ -1,7 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace App\Common;
+namespace App\Common\ArrayCollection\Doctrine2;
 
+use App\Common\ArrayCollection\ArrayCollectionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 use JetBrains\PhpStorm\Pure;

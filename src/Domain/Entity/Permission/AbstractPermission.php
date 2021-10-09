@@ -1,13 +1,32 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace App\Domain\Entity;
+namespace App\Domain\Entity\Permission;
 
-class Permission
+use App\Common\NullEntity\NullableTrait;
+
+abstract class AbstractPermission implements PermissionInterface
 {
-    protected ?int $id = null;
+    use NullableTrait;
+
+    /**
+     * @var string|null
+     */
     protected ?string $permissionKey = null;
+
+    /**
+     * @var string|null
+     */
     protected ?string $name = null;
+
+    /**
+     * @var string|null
+     */
     protected ?string $description = null;
+
+    /**
+     * @var int|null
+     */
+    protected ?int $id = null;
 
     /**
      * @param int|null $id
@@ -35,11 +54,51 @@ class Permission
     }
 
     /**
+     * @param string|null $permissionKey
+     */
+    public function setPermissionKey(?string $permissionKey): void
+    {
+        $this->permissionKey = $permissionKey;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPermissionKey(): ?string
+    {
+        return $this->permissionKey;
+    }
+
+    /**
+     * @param string|null $name
+     */
+    public function setName(?string $name): void
+    {
+        $this->name = $name;
+    }
+
+    /**
      * @return int|null
      */
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @param string|null $description
+     */
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
     }
 
     /**
@@ -53,48 +112,8 @@ class Permission
     /**
      * @return string|null
      */
-    public function getPermissionKey(): ?string
-    {
-        return $this->permissionKey;
-    }
-
-    /**
-     * @param string|null $permissionKey
-     */
-    public function setPermissionKey(?string $permissionKey): void
-    {
-        $this->permissionKey = $permissionKey;
-    }
-
-    /**
-     * @return string|null
-     */
     public function getName(): ?string
     {
         return $this->name;
-    }
-
-    /**
-     * @param string|null $name
-     */
-    public function setName(?string $name): void
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string|null $description
-     */
-    public function setDescription(?string $description): void
-    {
-        $this->description = $description;
     }
 }

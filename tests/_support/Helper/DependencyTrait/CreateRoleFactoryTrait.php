@@ -1,9 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Tests\_support\Helper\DependencyTrait;
 
-use App\Common\ArrayCollectionInterface;
-use App\Domain\Entity\Role;
+use App\Common\ArrayCollection\ArrayCollectionInterface;
+use App\Domain\Entity\Role\Role;
 use App\Domain\Factory\RoleFactory;
 use Codeception\Stub;
 use Exception;

@@ -1,11 +1,15 @@
-<?php
-namespace App\Tests\unit\Domain\Entity;
+<?php declare(strict_types=1);
 
-use App\Domain\Entity\Permission;
+namespace App\Tests\unit\Domain\Entity\Permission;
+
+use App\Domain\Entity\Permission\Permission;
+use App\Tests\_support\Helper\AssertionTrait\CheckPermissionTrait;
 use Codeception\Test\Unit;
 
 class PermissionTest extends Unit
 {
+    use CheckPermissionTrait;
+
     /**
      * @test
      */
@@ -18,10 +22,7 @@ class PermissionTest extends Unit
 
         $permission = new Permission($id, $permissionKey, $name, $description);
 
-        expect($permission->getId())->toBe($id);
-        expect($permission->getPermissionKey())->toBe($permissionKey);
-        expect($permission->getName())->toBe($name);
-        expect($permission->getDescription())->toBe($description);
+        $this->checkPermission($permission, $id, $permissionKey, $name, $description);
     }
 
     /**
@@ -31,10 +32,7 @@ class PermissionTest extends Unit
     {
         $permission = new Permission();
 
-        expect($permission->getId())->toBeNull();
-        expect($permission->getPermissionKey())->toBeNull();
-        expect($permission->getName())->toBeNull();
-        expect($permission->getDescription())->toBeNull();
+        $this->checkPermission($permission, null, null, null, null);
     }
 
     /**

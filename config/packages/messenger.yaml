@@ -1,0 +1,12 @@
+framework:
+    messenger:
+        default_bus: query.bus
+
+        buses:
+            query.bus: ~
+
+        transports:
+            sync: 'sync://'
+
+        routing:
+            'App\Common\CQRS\Query\QueryInterface': sync

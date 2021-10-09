@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpPropertyOnlyWrittenInspection */
+<?php declare(strict_types=1);
 
 namespace App\Persistence\Doctrine2\Entity;
 
@@ -17,28 +17,28 @@ class Permission
      *
      * @var int
      */
-    private int $id;
+    protected int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      *
      * @var string
      */
-    private string $permissionKey;
+    protected string $permissionKey;
 
     /**
      * @ORM\Column(type="string", length=255)
      *
      * @var string
      */
-    private string $name;
+    protected string $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      *
      * @var string|null
      */
-    private ?string $description = null;
+    protected ?string $description = null;
 
     /**
      * @param string|null $permissionKey

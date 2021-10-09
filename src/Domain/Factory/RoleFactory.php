@@ -1,11 +1,12 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Domain\Factory;
 
 use App\Application\Service\PermissionStorageServiceInterface;
-use App\Common\ArrayCollectionFactoryInterface;
-use App\Common\ArrayCollectionInterface;
-use App\Domain\Entity\Role;
+use App\Common\ArrayCollection\ArrayCollectionFactoryInterface;
+use App\Common\ArrayCollection\ArrayCollectionInterface;
+use App\Domain\Entity\Role\NullRole;
+use App\Domain\Entity\Role\Role;
 
 class RoleFactory
 {
@@ -51,5 +52,10 @@ class RoleFactory
         }
 
         return $role;
+    }
+
+    public function createNull(): NullRole
+    {
+        return new NullRole($this->arrayCollectionFactory);
     }
 }

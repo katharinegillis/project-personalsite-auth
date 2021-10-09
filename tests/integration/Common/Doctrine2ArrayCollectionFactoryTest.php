@@ -1,8 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 namespace App\Tests\integration\Common;
 
-use App\Common\Doctrine2ArrayCollection;
-use App\Common\Doctrine2ArrayCollectionFactory;
+use App\Common\ArrayCollection\Doctrine2\Doctrine2ArrayCollection;
+use App\Common\ArrayCollection\Doctrine2\Doctrine2ArrayCollectionFactory;
 use Codeception\Test\Unit;
 
 class Doctrine2ArrayCollectionFactoryTest extends Unit

@@ -1,9 +1,10 @@
-<?php
+<?php declare(strict_types=1);
+
 namespace App\Tests\unit\Domain\Factory;
 
-use App\Common\ArrayCollectionInterface;
-use App\Domain\Entity\Permission;
+use App\Domain\Entity\Permission\Permission;
 use App\Domain\Factory\RoleFactory;
+use App\Tests\_support\Helper\AssertionTrait\CheckRoleTrait;
 use App\Tests\_support\Helper\DependencyTrait\CreateArrayCollectionFactoryInterfaceTrait;
 use App\Tests\_support\Helper\DependencyTrait\CreatePermissionStorageServiceInterfaceTrait;
 use Codeception\Test\Unit;
@@ -13,6 +14,7 @@ class RoleFactoryTest extends Unit
 {
     use CreateArrayCollectionFactoryInterfaceTrait;
     use CreatePermissionStorageServiceInterfaceTrait;
+    use CheckRoleTrait;
 
     /**
      * @test
@@ -42,13 +44,7 @@ class RoleFactoryTest extends Unit
 
         $role = $roleFactory->create($id, $name, $description, $permissions);
 
-        expect($role->getId())->toBe($id);
-        expect($role->getName())->toBe($name);
-        expect($role->getDescription())->toBe($description);
-        expect($role->getPermissions())->toBeInstanceOf(ArrayCollectionInterface::class);
-        foreach ($role->getPermissions() as $index => $permission) {
-            expect($permission)->toEqual($permissions[$index]);
-        }
+        $this->checkRole($role, $id, $name, $description, $permissions);
     }
 
     /**
@@ -61,11 +57,7 @@ class RoleFactoryTest extends Unit
 
         $role = $roleFactory->create();
 
-        expect($role->getId())->toBeNull();
-        expect($role->getName())->toBeNull();
-        expect($role->getDescription())->toBeNull();
-        expect($role->getPermissions())->toBeInstanceOf(ArrayCollectionInterface::class);
-        expect($role->getPermissions()->count())->toBe(0);
+        $this->checkRole($role, null, null, null, []);
     }
 
     /**
@@ -107,12 +99,22 @@ class RoleFactoryTest extends Unit
 
         $role = $roleFactory->create($id, $name, $description);
 
-        expect($role->getId())->toBe($id);
-        expect($role->getName())->toBe($name);
-        expect($role->getDescription())->toBe($description);
-        expect($role->getPermissions())->toBeInstanceOf(ArrayCollectionInterface::class);
-        foreach ($role->getPermissions() as $index => $permission) {
-            expect($permission)->toEqual($permissions[$index]);
-        }
+        $this->checkRole($role, $id, $name, $description, $permissions);
+    }
+
+    /**
+     * @test
+     * @throws Exception
+     */
+    public function I_can_create_a_null_role()
+    {
+        $roleFactory = new RoleFactory(
+            $this->createArrayCollectionFactoryInterface(),
+            $this->createPermissionStorageServiceInterface()
+        );
+
+        $nullRole = $roleFactory->createNull();
+
+        $this->checkNullRole($nullRole);
     }
 }
