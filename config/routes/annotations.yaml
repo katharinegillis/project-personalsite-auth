@@ -1,5 +1,5 @@
 controllers:
-    resource: ../../src/Controller/
+    resource: ../../src/Presentation/**/*Controller.php
     type: annotation
 
 kernel:
